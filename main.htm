@@ -1,0 +1,157 @@
+<html>   
+<head>   
+  <metahttp-equiv="Content-Type"   content="text/html;   charset=gb2312">   
+  <title></title>  
+  <script src="jquery.min.js"></script> 
+  <style>   
+ 
+  .btn      {background:#ccc;text-align:center;}
+  .btn_hover{background:#dd9;text-align:center;}
+  
+  table{ border:1px solid black;overflow:hidden}
+     td{ border:1px solid black;overflow:hidden }
+	 th{ border:1px solid black;overflow:hidden } 
+	 
+ .ntable    { border :2px solid black;position:relative; background:#dcc;}
+ .ntable td { text-align:center;background:#ccc;}
+  </style>   
+<script type="text/javascript">
+$(document).ready(function(){       
+    $(".btn").hover ( 
+		function() {$(this).removeClass(); $(this).addClass("btn_hover");}
+	   ,function() {$(this).removeClass(); $(this).addClass("btn"      );}
+	);
+	$("#btn_ntb").click(function() {
+	   var table= 
+		"<table onmousemove='MouseOverFun2(this)' onmouseup='MouseUpToMove(this);'><tr><td bgcolor='#99CCFF' >列头1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr> <tr><td>3</td></tr></table>";
+		$("#workpanel").append(table)
+		               .attr('class','ntable')
+		               .attr('onmouseup','ntbl_up(this)')
+		               .attr('onmousemove','tbl_init(this)')
+		 ;
+				
+	});
+});
+  
+	  var   beginMoving=false;   
+	  var   sourceObj=null;   
+	  var   objectObj=null;   
+	  var   objectObj2=null;
+	     
+	  function   MouseDownToMove(obj)
+	  {   
+		  obj.style.zIndex=1;   
+		  obj.mouseDownY=event.clientY;   
+		  obj.mouseDownX=event.clientX;   
+		  beginMoving=true;   
+		  obj.setCapture();   
+		  sourceObj=obj;   
+		  objectObj=null;   
+	  }   
+    function   MouseMoveToMove(obj)
+    {   
+       if(!beginMoving)   return   false;   
+			 obj.style.top   =   (event.clientY-obj.mouseDownY);   
+			 obj.style.left   =   (event.clientX-obj.mouseDownX);   
+    }   
+   
+   function   MouseUpToMove(obj)
+   {   
+		  if(!beginMoving)   return   false; 
+  
+		  obj.releaseCapture();   
+		  obj.style.top=0;   
+		  obj.style.left=0;   
+		  obj.style.zIndex=0;   
+		  beginMoving=false;   
+		  window.setTimeout("swapFun()",20);   
+  }   
+    
+  function   MouseOverFun(obj)   
+  {   
+	  if(obj==sourceObj)   return   false;   
+	  objectObj=obj;   
+  }   
+    
+  function   MouseOverFun2(obj)   
+  {   
+  	objectObj2=obj;   
+  }   
+    
+  function   swapFun()   
+  {   
+	  if(sourceObj!=null  &&   objectObj!=null && sourceObj!=objectObjl)
+	  {   
+	       objectObj.insertAdjacentElement("beforeBegin",sourceObj);  
+	  } else
+	  {   
+	    if(sourceObj!=null   &&   objectObj2!=null && sourceObj!=objectObj2) 
+	     {  
+	      // objectObj2.insertAdjacentElement("beforeEnd",sourceObj); 
+	      var rlen=objectObj2.rows.length;
+	       var vlen=sourceObj.rows[0].cells.length;
+	       
+	       for(var j=0;j<rlen;j++)
+	       {
+	       	  
+			     for(var i=0;i<vlen;i++)
+			      {
+						　　var cell   =   objectObj2.rows[j].insertCell(vlen);
+						　　cell.innerHTML=sourceObj.rows[j].cells[i].innerHTML;
+				    }    
+	       }
+	     }  
+	   }
+	   
+	    
+	  sourceObj=null;   
+	  objectObj=null;   
+	  objectObj2=null;   
+  }  
+  
+
+  </script>   
+  </head>   
+    
+  <body>   
+    
+  <table>   
+  <tr>   
+  <td  valign="top" style="border:1px solid black;" width="200px" style="height:800px;"><br>
+  <div class="btn" id="btn_ntb" >新建表格</div>
+         <!-- 
+          <table  class ="des_table removableObj"  
+	              onmousedown='MouseDownToMove(this)'   
+	              onmousemove='MouseMoveToMove(this)'   
+	              onmouseup='MouseUpToMove(this);'   
+	              onmouseover=MouseOverFun(this);"   >   
+                  <tr><td  bgcolor="#c0c0c0" >新数据</td></tr>   
+                  <tr><td>n1</td></tr> 
+                  <tr><td>n2</td></tr> 
+                  <tr><td>n3</td></tr>
+                  <tr><td>n4</td></tr> 
+                  <tr><td>n5</td></tr> 
+                  <tr><td>n6</td></tr>   
+           </table>
+           -->	
+	</td>   
+    <td  id="workpanel"  valign="top" height="52" style="border:1px solid black;width:1000px;height:800px;"> <br> 
+     
+     <!-- 
+      <table  class ="des_table removableObj"  
+              onmousemove='MouseOverFun2(this)' 
+              onmouseup='MouseUpToMove(this);'   >   
+                  <tr><td bgcolor="#99CCFF" >旧数据</td></tr>   
+                  <tr><td>1</td></tr> 
+                  <tr><td>2</td></tr> 
+                  <tr><td>3</td></tr>
+                  <tr><td>4</td></tr> 
+                  <tr><td>5</td></tr> 
+                  <tr><td>6</td></tr>   
+        </table>
+      	 -->	
+    </td>   
+    </tr>   
+  </table>   
+  </body>   
+  </html>   
